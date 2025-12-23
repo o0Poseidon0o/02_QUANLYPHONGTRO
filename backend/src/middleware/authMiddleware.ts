@@ -1,6 +1,6 @@
-import type { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import User from '../models/Users.js';
+import User from '../models/User.js';
 
 interface AuthRequest extends Request {
   user?: any;
@@ -11,21 +11,23 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
 
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
-      // Lấy token từ header
+      // 1. Lấy token từ header
       token = req.headers.authorization.split(' ')[1];
 
-      // --- SỬA LỖI TẠI ĐÂY: Dùng Double Casting (as unknown as ...) ---
-      const secretKey = process.env.JWT_SECRET || 'secret';
-      
-      // Ép kiểu sang unknown trước để TypeScript không báo lỗi overlapping
+      // 2. [FIX QUAN TRỌNG] Tạo biến secret riêng để đảm bảo luôn là String
+      // Nếu không tìm thấy env (lúc build docker), nó sẽ dùng chuỗi 'fallback_secret'
+      const secretKey = process.env.JWT_SECRET || 'fallback_secret';
+
+      // 3. [FIX QUAN TRỌNG] Ép kiểu 2 lần (Double Casting) cho kết quả trả về
+      // jwt.verify trả về string | JwtPayload, ta ép về object có id
       const decoded = jwt.verify(token, secretKey) as unknown as { id: string; role: string };
 
-      // Tìm user và gắn vào request
+      // 4. Tìm user từ ID đã giải mã
       req.user = await User.findById(decoded.id).select('-password_hash');
 
       next();
     } catch (error) {
-      console.error(error);
+      console.error("Lỗi xác thực:", error);
       res.status(401).json({ message: 'Not authorized, token failed' });
     }
   }
