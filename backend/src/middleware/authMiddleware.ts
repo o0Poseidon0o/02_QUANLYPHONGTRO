@@ -11,23 +11,20 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
 
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
-      // 1. Lấy token từ header
       token = req.headers.authorization.split(' ')[1];
 
-      // 2. [FIX QUAN TRỌNG] Tạo biến secret riêng để đảm bảo luôn là String
-      // Nếu không tìm thấy env (lúc build docker), nó sẽ dùng chuỗi 'fallback_secret'
-      const secretKey = process.env.JWT_SECRET || 'fallback_secret';
+      // --- SỬA LỖI TẠI ĐÂY ---
+      // Dùng "as any" để ép TypeScript im lặng, chấp nhận mọi kiểu dữ liệu
+      const secret = process.env.JWT_SECRET as any; 
+      
+      const decoded = jwt.verify(token, secret) as any;
+      // -----------------------
 
-      // 3. [FIX QUAN TRỌNG] Ép kiểu 2 lần (Double Casting) cho kết quả trả về
-      // jwt.verify trả về string | JwtPayload, ta ép về object có id
-      const decoded = jwt.verify(token, secretKey) as unknown as { id: string; role: string };
-
-      // 4. Tìm user từ ID đã giải mã
       req.user = await User.findById(decoded.id).select('-password_hash');
 
       next();
     } catch (error) {
-      console.error("Lỗi xác thực:", error);
+      console.error("Lỗi token:", error);
       res.status(401).json({ message: 'Not authorized, token failed' });
     }
   }
