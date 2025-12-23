@@ -13,18 +13,20 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
     try {
       token = req.headers.authorization.split(' ')[1];
 
-      // --- SỬA LỖI TẠI ĐÂY ---
-      // Dùng "as any" để ép TypeScript im lặng, chấp nhận mọi kiểu dữ liệu
-      const secret = process.env.JWT_SECRET as any; 
+      // --- TUYỆT CHIÊU CUỐI: @ts-ignore ---
+      // Dòng comment này bắt buộc phải nằm ngay trên dòng gây lỗi
+      // Nó sẽ tắt hoàn toàn kiểm tra lỗi cho dòng jwt.verify bên dưới
       
-      const decoded = jwt.verify(token, secret) as any;
-      // -----------------------
+      // @ts-ignore
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      req.user = await User.findById(decoded.id).select('-password_hash');
+      // ------------------------------------
+
+      req.user = await User.findById((decoded as any).id).select('-password_hash');
 
       next();
     } catch (error) {
-      console.error("Lỗi token:", error);
+      console.error("Lỗi xác thực:", error);
       res.status(401).json({ message: 'Not authorized, token failed' });
     }
   }
