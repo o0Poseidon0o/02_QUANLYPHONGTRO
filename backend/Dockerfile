@@ -22,4 +22,4 @@ RUN npm run build
 EXPOSE 5000
 
 # Lệnh này sẽ in ra cấu trúc thư mục dist để ta biết file nằm ở đâu
-CMD ["sh", "-c", "echo '=== KIEM TRA THU MUC DIST ==='; ls -R /app/dist; echo '=== KET THUC KIEM TRA ==='; node dist/index.js"]
+CMD ["node", "dist/index.js"]
