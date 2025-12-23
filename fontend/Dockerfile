@@ -5,7 +5,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 # Lệnh build của Vite
-RUN npm run build
+RUN npm run dev
 
 # --- Giai đoạn 2: Chạy Nginx ---
 FROM nginx:alpine as production-stage
