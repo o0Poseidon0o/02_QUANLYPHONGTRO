@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     /* MỞ COMMENT 2 DÒNG NÀY RA (Quan trọng nhất) */
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist",
 
     "target": "es2020",
@@ -11,6 +11,6 @@
     "skipLibCheck": true,
     "strict": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*","index.ts"],
   "exclude": ["node_modules"]
 }
