@@ -24,7 +24,7 @@ services:
     container_name: quanlynhatro_frontend
     restart: always
     ports:
-      - "89:80" # ⚠️ [FIX 3] Nginx mặc định chạy cổng 80, nên map 89:80 (trừ khi bạn đã sửa nginx.conf thành 89)
+      - "89:89" # ⚠️ [FIX 3] Nginx mặc định chạy cổng 80, nên map 89:80 (trừ khi bạn đã sửa nginx.conf thành 89)
     depends_on:
       - backend
     networks:
