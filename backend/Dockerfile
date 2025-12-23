@@ -1,23 +1,25 @@
-# 1. Môi trường
+# Đổi từ 18-alpine sang 24-alpine
 FROM node:24-alpine
 
-# 2. Tạo thư mục làm việc trong Docker
 WORKDIR /app
 
-# 3. COPY package.json trước (Để tận dụng cache nếu không cài thêm thư viện mới)
+# Copy file package trước để tận dụng cache
 COPY package*.json ./
 
-# 4. Cài đặt thư viện
+# Cài đặt thư viện
 RUN npm install
 
-# 5. COPY toàn bộ code nguồn vào (Trừ những thứ trong .dockerignore)
+# Copy toàn bộ code
 COPY . .
 
-# 6. Build TypeScript sang JavaScript (Chạy lệnh build trong package.json)
-RUN npm run dev
+# --- SỬA LỖI TẠI ĐÂY ---
+# KHÔNG DÙNG: RUN npm run dev (Vì nó sẽ treo build vĩnh viễn)
+# DÙNG:
+RUN npm run build
+# -----------------------
 
-# 7. Mở cổng
+# Mở cổng
 EXPOSE 5000
 
-# 8. Chạy lệnh start (node dist/index.js)
+# Chạy server (Lệnh này sẽ chạy: node dist/index.js)
 CMD ["npm", "start"]
