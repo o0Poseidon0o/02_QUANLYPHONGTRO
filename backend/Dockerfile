@@ -21,5 +21,5 @@ RUN npm run build
 # Mở cổng
 EXPOSE 5000
 
-# Chạy server (Lệnh này sẽ chạy: node dist/index.js)
-CMD ["npm", "start"]
+# Lệnh này sẽ in ra cấu trúc thư mục dist để ta biết file nằm ở đâu
+CMD ["sh", "-c", "echo '=== KIEM TRA THU MUC DIST ==='; ls -R /app/dist; echo '=== KET THUC KIEM TRA ==='; node dist/index.js"]
