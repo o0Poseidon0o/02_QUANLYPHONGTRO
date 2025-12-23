@@ -2,8 +2,8 @@
 import axios from 'axios';
 
 // Lấy URL từ biến môi trường, nếu không có thì dùng localhost
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
+// const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'; //Chạy trên localhost:5000 nếu không có biến môi trường
+const API_URL = import.meta.env.VITE_API_URL || '/api'; // chạy tren docker
 const instance = axios.create({
     baseURL: API_URL,
     headers: {
