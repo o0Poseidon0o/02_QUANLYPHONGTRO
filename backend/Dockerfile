@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # 6. Build TypeScript sang JavaScript (Chạy lệnh build trong package.json)
-RUN npm run build
+RUN npm run dev
 
 # 7. Mở cổng
 EXPOSE 5000
