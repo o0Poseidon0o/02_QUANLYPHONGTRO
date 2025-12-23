@@ -1,5 +1,5 @@
 # 1. Môi trường
-FROM node:18-alpine
+FROM node:24-alpine
 
 # 2. Tạo thư mục làm việc trong Docker
 WORKDIR /app
