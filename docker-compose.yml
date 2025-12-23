@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # Service 1: Backend
   backend:
-    build: ./server
+    build: ./backend
     container_name: quanlynhatro_backend
     restart: always
     environment:
@@ -16,7 +16,7 @@ services:
 
   # Service 2: Frontend (Chứa Nginx)
   frontend:
-    build: ./client
+    build: ./fontend
     container_name: quanlynhatro_frontend
     restart: always
     ports:
