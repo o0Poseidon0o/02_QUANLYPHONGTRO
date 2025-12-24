@@ -1,28 +1,32 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # Service 1: Backend
   backend:
-    build: ./backend
+    build: ./backend # ⚠️ Lưu ý: Đảm bảo thư mục code của bạn tên là 'backend' (hoặc 'server')
     container_name: quanlynhatro_backend
     restart: always
-    environment:
-      - PORT=5000
-      # Thay bằng chuỗi kết nối MongoDB Atlas thật của bạn
-      - MONGO_URI=mongodb+srv://lenhan16587:Lenh%40n16587@quanlynhatro.6mzuf3t.mongodb.net/quanlynhatro?retryWrites=true&w=majority&appName=quanlynhatro
-      - JWT_SECRET=c8d4e2f1a3b5c7d9e0f2a4b6c8d0e2f4a6b8c0d2e4f6a8b0c2d4e6f8a0b2c4d6e8f0a2b4c6d8e0f2
+
+    # --- [FIX 1] XÓA phần environment viết cứng đi ---
+    # Thay bằng env_file để đọc từ file .env
+    env_file:
+      - ./backend/.env # ⚠️ Đường dẫn trỏ vào nơi chứa file .env
+    # -----------------------------------------------
+
+    ports:
+      - "5000:5000" # Nên mở port này để dễ test backend độc lập
     networks:
       - app-network
 
-  # Service 2: Frontend (Chứa Nginx)
+  # Service 2: Frontend
   frontend:
-    build: ./fontend
+    build: ./fontend # ⚠️ [FIX 2] Bạn viết sai chính tả: 'fontend' -> kiểm tra lại tên thư mục là 'frontend' hay 'client'?
     container_name: quanlynhatro_frontend
     restart: always
     ports:
-      - "89:89" # Mở cổng 89 ra ngoài internet
+      - "89:89" # ⚠️ [FIX 3] Nginx mặc định chạy cổng 80, nên map 89:80 (trừ khi bạn đã sửa nginx.conf thành 89)
     depends_on:
-      - backend # Chờ backend chạy trước
+      - backend
     networks:
       - app-network
 
