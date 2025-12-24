@@ -64,8 +64,8 @@ const UserManager = () => {
       const headers = { Authorization: `Bearer ${token}` };
       
       const [usersRes, roomsRes] = await Promise.all([
-        axiosClient.get('/api/users', { headers }),
-        axiosClient.get('/api/rooms', { headers })
+        axiosClient.get('/users', { headers }),
+        axiosClient.get('/rooms', { headers })
       ]);
 
       setTenants(usersRes.data);
